@@ -14,6 +14,7 @@
 #' @param execution The execution environment containing input data, output data, and status information.
 #'
 #' @return Returns the output of the executed node, stored in the execution environment.
+#' @export
 #'
 run_node <- function(node, execution) {
 
@@ -21,17 +22,17 @@ run_node <- function(node, execution) {
   start <- Sys.time()
 
   ## Load data
-  inputs <- lapply(x = node$x, fun = bro:::get_data, execution)
+  inputs <- lapply(x = node$x, fun = get_data, execution)
 
   ## Execute node
   outputs <- base::do.call(what = node$f, args = inputs)
 
   ## Store data in memory and in a file if necessary
   if(length(node$y) == 1) {
-    bro:::save_data(outputs, node$y, execution)
+    save_data(outputs, node$y, execution)
   } else {
     for(i in seq_along(node$y)) {
-      bro:::save_data(outputs[[i]], node$y[[i]], execution)
+      save_data(outputs[[i]], node$y[[i]], execution)
     }
   }
 

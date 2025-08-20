@@ -18,6 +18,7 @@
 #' @param git (logical) If TRUE, initializes a Git repository and adds an initial commit.
 #' @param replace (logical) If FALSE and the specified folder already exists, stops and displays an error.
 #'   If TRUE, replaces an existing folder with the new project.
+#' @export
 #'
 create <- function(name = getwd(), example = TRUE, renv = TRUE, git = TRUE, replace = FALSE) {
 

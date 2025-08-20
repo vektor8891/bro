@@ -12,6 +12,7 @@
 #' @param data The dataset to be saved.
 #' @param name The name under which the dataset is stored in the execution environment and registered in the data registry.
 #' @param execution The execution environment containing the data registry.
+#' @export
 #'
 save_data <- function(data, name, execution) {
 
@@ -25,8 +26,29 @@ save_data <- function(data, name, execution) {
     ## Save data
     type <- registry[[name]]$type
     path <- do.call(file.path, append(list(), registry[[name]]$path))
-    saver <- eval(parse(text = bro:::connectors[[type]]$save))
-    message("(bro) Saving to File '", name, "' (", type, ", ", bro:::connectors[[type]]$save, ")")
+    
+    # Check if connector exists
+    if(!type %in% names(connectors)) {
+      stop("unsupported data type '", type, "'. Available types: ", 
+           paste(names(connectors), collapse = ", "))
+    }
+    
+    # Extract package name from saver function
+    saver_func <- connectors[[type]]$save
+    package_name <- strsplit(saver_func, "::")[[1]][1]
+    
+    # Check if package is available for non-base packages
+    if(package_name != "base") {
+      if(!bro:::safe_require_namespace(package_name, 
+                                     error_message = paste("Package '", package_name, 
+                                                          "' is required to save '", type, 
+                                                          "' files. Please install it."))) {
+        stop("Cannot save '", type, "' files without package '", package_name, "'")
+      }
+    }
+    
+    saver <- eval(parse(text = saver_func))
+    message("(bro) Saving to File '", name, "' (", type, ", ", saver_func, ")")
     do.call(what = saver, args = append(list(file = path), registry[[name]]$save_args))
   }
 

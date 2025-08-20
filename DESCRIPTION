@@ -9,11 +9,26 @@ Authors@R: c(person("Guilherme", "Salome", role = c("aut", "cre"),
                     comment = c(ORCID = "0000-0002-1297-0827")))
 Depends: R (>= 3.0)
 Imports:
-  renv
+  renv,
+  yaml,
+  rlang
 Suggests:
+  readr,
+  digest,
+  arrow,
+  xgboost,
+  lightgbm,
+  data.table,
+  feather,
+  parquet,
+  jsonlite,
+  xml2,
+  httr,
+  curl,
+  testthat
 Description: A framework for developing projects that are well-organized and easy to reproduce.
 License: MIT + file LICENSE
 URL: https://github.com/Salompas/bro
 BugReports: https://github.com/Salompas/bro/issues
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
 Encoding: UTF-8

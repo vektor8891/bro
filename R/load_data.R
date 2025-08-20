@@ -13,6 +13,7 @@
 #' @param execution The execution environment containing the data registry.
 #'
 #' @return Returns the loaded dataset, and it is also stored in the execution environment for further use.
+#' @export
 #'
 load_data <- function(name, execution) {
 
@@ -32,8 +33,29 @@ load_data <- function(name, execution) {
   ## Load data
   type <- registry[[name]]$type
   path <- do.call(file.path, append(list(), registry[[name]]$path))
-  loader <- eval(parse(text = bro:::connectors[[type]]$load))
-  message("(bro) Loading '", name, "' (", type, ", ", bro:::connectors[[type]]$load, ")")
+  
+  # Check if connector exists
+  if(!type %in% names(connectors)) {
+    stop("unsupported data type '", type, "'. Available types: ", 
+         paste(names(connectors), collapse = ", "))
+  }
+  
+  # Extract package name from loader function
+  loader_func <- connectors[[type]]$load
+  package_name <- strsplit(loader_func, "::")[[1]][1]
+  
+  # Check if package is available for non-base packages
+  if(package_name != "base") {
+    if(!bro:::safe_require_namespace(package_name, 
+                                   error_message = paste("Package '", package_name, 
+                                                        "' is required to load '", type, 
+                                                        "' files. Please install it."))) {
+      stop("Cannot load '", type, "' files without package '", package_name, "'")
+    }
+  }
+  
+  loader <- eval(parse(text = loader_func))
+  message("(bro) Loading '", name, "' (", type, ", ", loader_func, ")")
   execution$data[[name]] <- do.call(what = loader, args = append(list(file = path), registry[[name]]$load_args))
 
   return(execution$data[[name]])
