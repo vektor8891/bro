@@ -4,13 +4,7 @@
 \alias{node}
 \title{Create a Node in a Data Processing Pipeline}
 \usage{
-node(
-  f,
-  x = NULL,
-  y = NULL,
-  name = deparse(substitute(f)),
-  env = parent.frame()
-)
+node(f, x = NULL, y = NULL, name = deparse(substitute(f)))
 }
 \arguments{
 \item{f}{(function) The R function that the node represents in the pipeline.}
