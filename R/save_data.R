@@ -39,10 +39,10 @@ save_data <- function(data, name, execution) {
     
     # Check if package is available for non-base packages
     if(package_name != "base") {
-      if(!bro:::safe_require_namespace(package_name, 
-                                     error_message = paste("Package '", package_name, 
-                                                          "' is required to save '", type, 
-                                                          "' files. Please install it."))) {
+      if(!safe_require_namespace(package_name, 
+                               error_message = paste("Package '", package_name, 
+                                                    "' is required to save '", type, 
+                                                    "' files. Please install it."))) {
         stop("Cannot save '", type, "' files without package '", package_name, "'")
       }
     }

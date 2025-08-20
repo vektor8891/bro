@@ -9,7 +9,7 @@ connectors <- NULL
 ##' @param fallback_function Fallback function to use if package is not available
 ##' @param error_message Custom error message if package is not available
 ##' @return TRUE if package is available, FALSE otherwise
-##' @keywords internal
+##' @export
 safe_require_namespace <- function(package, fallback_function = NULL, error_message = NULL) {
   if (requireNamespace(package, quietly = TRUE)) {
     return(TRUE)

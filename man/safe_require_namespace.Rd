@@ -19,4 +19,3 @@ TRUE if package is available, FALSE otherwise
 \description{
 Safely loads an external package using requireNamespace and provides fallback behavior
 }
-\keyword{internal}

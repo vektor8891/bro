@@ -2,15 +2,15 @@
 
 test_that("safe_require_namespace works correctly", {
   # Test with available package (base)
-  expect_true(bro:::safe_require_namespace("base"))
+  expect_true(safe_require_namespace("base"))
   
   # Test with unavailable package
-  expect_false(bro:::safe_require_namespace("nonexistent_package_12345"))
+  expect_false(safe_require_namespace("nonexistent_package_12345"))
   
   # Test with custom error message
   expect_warning(
-    bro:::safe_require_namespace("nonexistent_package_12345", 
-                               error_message = "Custom error message"),
+    safe_require_namespace("nonexistent_package_12345", 
+                         error_message = "Custom error message"),
     "Custom error message"
   )
 })

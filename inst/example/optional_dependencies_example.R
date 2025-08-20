@@ -35,7 +35,7 @@ message("Hash result: ", hash_result)
 message("Checking optional package availability:")
 packages <- c("readr", "xgboost", "arrow", "digest")
 for (pkg in packages) {
-  available <- bro:::safe_require_namespace(pkg)
+  available <- safe_require_namespace(pkg)
   message("  ", pkg, ": ", if(available) "Available" else "Not available")
 }
 
