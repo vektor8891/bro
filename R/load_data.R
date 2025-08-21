@@ -16,44 +16,45 @@
 #' @export
 #'
 load_data <- function(name, execution) {
-
   ## Get data registry from execution environment
   registry <- execution$registry
 
   ## Stop if data does not exist
-  if(! name %in% names(registry)) {
+  if (!name %in% names(registry)) {
     stop("no entry '", name, "' in ", file.path("inst", "data.yaml"))
   }
 
   ## Stop if path to data is missing
-  if(is.null(registry[[name]]$path)) {
+  if (is.null(registry[[name]]$path)) {
     stop("missing 'path' in '", name, "' in ", file.path("inst", "data.yaml"))
   }
 
   ## Load data
   type <- registry[[name]]$type
   path <- do.call(file.path, append(list(), registry[[name]]$path))
-  
+
   # Check if connector exists
-  if(!type %in% names(connectors)) {
-    stop("unsupported data type '", type, "'. Available types: ", 
-         paste(names(connectors), collapse = ", "))
+  if (!type %in% names(connectors)) {
+    stop(
+      "unsupported data type '", type, "'. Available types: ",
+      paste(names(connectors), collapse = ", ")
+    )
   }
-  
+
   # Extract package name from loader function
   loader_func <- connectors[[type]]$load
   package_name <- strsplit(loader_func, "::")[[1]][1]
-  
+
   # Check if package is available for non-base packages
-  if(package_name != "base") {
-    if(!safe_require_namespace(package_name, 
-                             error_message = paste("Package '", package_name, 
-                                                  "' is required to load '", type, 
-                                                  "' files. Please install it."))) {
-      stop("Cannot load '", type, "' files without package '", package_name, "'")
+  if (!package_name %in% c("base", "readr", "yaml")) {
+    if (!safe_require_namespace(package_name)) {
+      stop(
+        "Cannot load '", type, "' files without package '", package_name,
+        "'"
+      )
     }
   }
-  
+
   loader <- eval(parse(text = loader_func))
   message("(bro) Loading '", name, "' (", type, ", ", loader_func, ")")
   execution$data[[name]] <- do.call(what = loader, args = append(list(file = path), registry[[name]]$load_args))

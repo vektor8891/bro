@@ -11,9 +11,9 @@ Depends: R (>= 3.0)
 Imports:
   renv,
   yaml,
-  rlang
+  rlang,
+  readr
 Suggests:
-  readr,
   digest,
   arrow,
   xgboost,
