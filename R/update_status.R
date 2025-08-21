@@ -14,20 +14,19 @@
 #' @return Returns NULL after updating the status information.
 #'
 update_status <- function(node, inputs) {
-
   ## Load status file
-  status <- bro:::load_data_status()
+  status <- load_data_status()
 
   ## Update node hash
   status$nodes[[node$name]] <- rlang::hash(node)
 
   ## Update data status
-  for(name in node$x) {
+  for (name in node$x) {
     execution$status$data[[name]] <- rlang::hash(inputs[[which(node$x == name)]])
   }
 
   ## Save status file
-  bro:::write_status(status)
+  write_status(status)
 
   return(NULL)
 }

@@ -15,11 +15,10 @@
 #' @return Returns TRUE if changes are detected, FALSE otherwise.
 #'
 detect_changes_input <- function(name, execution) {
-
   previous_status <- execution$status$data[[name]]
 
   ## If no previous status, assume data has been updated
-  if(is.null(previous_status)) {
+  if (is.null(previous_status)) {
     message("(bro) no previous status for '", name, "'")
     return(TRUE)
   }
@@ -27,15 +26,14 @@ detect_changes_input <- function(name, execution) {
   ## Check if input needs to be loaded to be checked for updates
   needs_load <- c("hash")
   strategy <- tolower(execution$registry[[name]]$update)
-  if(strategy %in% needs_load) {
-    data <- bro:::get_data(name, execution)
+  if (strategy %in% needs_load) {
+    data <- get_data(name, execution)
   }
 
   ## Check if data was updated compared to recorded status
-  if(strategy == "hash") {
+  if (strategy == "hash") {
     return(rlang::hash(data) == previous_status)
   }
 
   stop("undefined update strategy '", strategy, "'")
-
 }

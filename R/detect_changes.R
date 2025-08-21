@@ -14,15 +14,14 @@
 #' @return Returns TRUE if changes are detected in the node or its inputs, FALSE otherwise.
 #'
 detect_changes <- function(node, execution) {
-
   ## Check if node definition has changed
-  if(bro:::detect_changes_node(node, execution)) {
+  if (detect_changes_node(node, execution)) {
     return(TRUE)
   }
 
   ## Check if any of the inputs have changed
-  changed <- sapply(node$x, bro:::detect_changes_input, execution)
-  if(any(changed)) {
+  changed <- sapply(node$x, detect_changes_input, execution)
+  if (any(changed)) {
     return(TRUE)
   }
 

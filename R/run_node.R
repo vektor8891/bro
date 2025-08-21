@@ -16,7 +16,6 @@
 #' @return Returns the output of the executed node, stored in the execution environment.
 #'
 run_node <- function(node, execution) {
-
   message("(bro) Running node '", node$name, "'")
   start <- Sys.time()
 
@@ -27,21 +26,20 @@ run_node <- function(node, execution) {
   outputs <- base::do.call(what = node$f, args = inputs)
 
   ## Store data in memory and in a file if necessary
-  if(length(node$y) == 1) {
+  if (length(node$y) == 1) {
     save_data(outputs, node$y, execution)
   } else {
-    for(i in seq_along(node$y)) {
+    for (i in seq_along(node$y)) {
       save_data(outputs[[i]], node$y[[i]], execution)
     }
   }
 
   ## Update status on file
-  bro:::update_status(node, inputs)
+  update_status(node, inputs)
 
   stop <- Sys.time()
   message("(bro) Node '", node$name, "' Runtime: ", difftime(stop, start, units = "secs"), " seconds")
 
   ## Return output
   return(execution$data[[node$y]])
-
 }

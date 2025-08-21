@@ -22,7 +22,7 @@ safe_require_namespace <- function(
       )
     }
     if (!is.null(fallback_function)) {
-      return(fallback_function)
+      return(fallback_function())
     }
     return(FALSE)
   }
