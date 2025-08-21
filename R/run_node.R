@@ -14,7 +14,6 @@
 #' @param execution The execution environment containing input data, output data, and status information.
 #'
 #' @return Returns the output of the executed node, stored in the execution environment.
-#' @export
 #'
 run_node <- function(node, execution) {
 

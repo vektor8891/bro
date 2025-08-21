@@ -13,7 +13,6 @@
 #' @param execution The execution environment containing the data registry.
 #'
 #' @return Returns the loaded dataset, and it is also stored in the execution environment for further use.
-#' @export
 #'
 load_data <- function(name, execution) {
   ## Get data registry from execution environment

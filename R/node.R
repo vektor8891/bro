@@ -16,7 +16,6 @@
 #' @param name (character, optional) The name of the node. If not provided, it defaults to the name of the function.
 #'
 #' @return Returns a node, which is a named list with components representing the function, inputs, outputs, and name.
-#' @export
 #'
 node <- function(f, x = NULL, y = NULL, name = deparse(substitute(f)), env = parent.frame()) {
   ## Validate inputs for node

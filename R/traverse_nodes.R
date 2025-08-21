@@ -14,7 +14,6 @@
 #'
 #' @return Returns a dependency matrix indicating relationships between nodes, where 1 indicates dependency and
 #' 0 indicates no dependency. Each row indicates a different node, and the dependency relationship to the nodes in the columns.
-#' @export
 #'
 traverse_nodes <- function(nodes) {
   ## Create dependency matrix
