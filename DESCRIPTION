@@ -11,8 +11,7 @@ Depends: R (>= 3.0)
 Imports:
   renv,
   yaml,
-  rlang,
-  readr
+  rlang
 Suggests:
   digest,
   arrow,
@@ -25,6 +24,7 @@ Suggests:
   xml2,
   httr,
   curl,
+  readr,
   testthat
 Description: A framework for developing projects that are well-organized and easy to reproduce.
 License: MIT + file LICENSE
