@@ -45,8 +45,9 @@ load_data <- function(name, execution) {
   package_name <- strsplit(loader_func, "::")[[1]][1]
 
   # Check if package is available for non-base packages
-  if (!package_name %in% c("base", "readr", "yaml")) {
-    if (!safe_require_namespace(package_name)) {
+  imported_pkgs <- .get_imported_packages()
+  if (package_name != "base" && !(package_name %in% imported_pkgs)) {
+    if (!.safe_require_namespace(package_name)) {
       stop(
         "Cannot load '", type, "' files without package '", package_name,
         "'"

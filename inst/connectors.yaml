@@ -1,6 +1,6 @@
-# List of data types that can be loaded and saved automatically with 'bro'
+# List of data types that can be loaded and saved automatically with 'bro'.
+# Please note that some data types require installing additional packages.
 
-# The below data types can be handled by default
 rds:
   load: base::readRDS
   save: base::saveRDS
@@ -9,7 +9,6 @@ yaml:
   load: yaml::read_yaml
   save: yaml::write_yaml
 
-# The below data types require installing additional packages
 csv:
   load: readr::read_csv
   save: readr::write_csv
