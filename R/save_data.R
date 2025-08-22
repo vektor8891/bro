@@ -1,16 +1,21 @@
 #' @title Save Data
 #'
 #' @description
-#' Saves a specified dataset to a file based on the information in the data registry in the given execution environment.
+#' Saves a specified dataset to a file based on the information in the data
+#' registry in the given execution environment.
 #'
 #' @details
-#' This function saves a specified dataset to a file based on the information in the data registry in the provided execution environment.
-#' If the dataset is not in the registry, it is saved in memory only, and a message is displayed. If the dataset is in the registry,
-#' the function determines the data type and saves it to a file using the specified data saver method. Messages are displayed indicating
-#' the successful saving of the dataset, including its name, type, and saving method.
+#' This function saves a specified dataset to a file based on the information
+#' in the data registry in the provided execution environment. If the dataset
+#' is not in the registry, it is saved in memory only, and a message is
+#' displayed. If the dataset is in the registry, the function determines the
+#' data type and saves it to a file using the specified data saver method.
+#' Messages are displayed indicating the successful saving of the dataset,
+#' including its name, type, and saving method.
 #'
 #' @param data The dataset to be saved.
-#' @param name The name under which the dataset is stored in the execution environment and registered in the data registry.
+#' @param name The name under which the dataset is stored in the execution
+#' environment and registered in the data registry.
 #' @param execution The execution environment containing the data registry.
 #' @export
 #'
@@ -39,9 +44,11 @@ save_data <- function(data, name, execution) {
     package_name <- strsplit(saver_func, "::")[[1]][1]
 
     # Check if package is available for non-base packages
-    imported_pkgs <- .get_imported_packages()
+    imported_pkgs <- .get_imported_packages() # nolint: object_usage_linter
     if (package_name != "base" && !(package_name %in% imported_pkgs)) {
-      if (!.safe_require_namespace(package_name)) {
+      if (
+        !.safe_require_namespace(package_name) # nolint: object_usage_linter
+      ) {
         stop(
           "Cannot save '", type, "' files without package '", package_name,
           "'"
@@ -50,8 +57,14 @@ save_data <- function(data, name, execution) {
     }
 
     saver <- eval(parse(text = saver_func))
-    message("(bro) Saving to File '", name, "' (", type, ", ", saver_func, ")")
-    do.call(what = saver, args = append(list(file = path), registry[[name]]$save_args))
+    message(
+      "(bro) Saving to File '", name, "' (", type, ", ",
+      saver_func, ")"
+    )
+    do.call(what = saver, args = append(list(data), append(
+      list(file = path),
+      registry[[name]]$save_args
+    )))
   }
 
   base::assign(name, data, pos = execution$data)

@@ -9,16 +9,21 @@ save_data(data, name, execution)
 \arguments{
 \item{data}{The dataset to be saved.}
 
-\item{name}{The name under which the dataset is stored in the execution environment and registered in the data registry.}
+\item{name}{The name under which the dataset is stored in the execution
+environment and registered in the data registry.}
 
 \item{execution}{The execution environment containing the data registry.}
 }
 \description{
-Saves a specified dataset to a file based on the information in the data registry in the given execution environment.
+Saves a specified dataset to a file based on the information in the data
+registry in the given execution environment.
 }
 \details{
-This function saves a specified dataset to a file based on the information in the data registry in the provided execution environment.
-If the dataset is not in the registry, it is saved in memory only, and a message is displayed. If the dataset is in the registry,
-the function determines the data type and saves it to a file using the specified data saver method. Messages are displayed indicating
-the successful saving of the dataset, including its name, type, and saving method.
+This function saves a specified dataset to a file based on the information
+in the data registry in the provided execution environment. If the dataset
+is not in the registry, it is saved in memory only, and a message is
+displayed. If the dataset is in the registry, the function determines the
+data type and saves it to a file using the specified data saver method.
+Messages are displayed indicating the successful saving of the dataset,
+including its name, type, and saving method.
 }

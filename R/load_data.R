@@ -51,9 +51,9 @@ load_data <- function(name, execution) {
   package_name <- strsplit(loader_func, "::")[[1]][1]
 
   # Check if package is available for non-base packages
-  imported_pkgs <- .get_imported_packages()
+  imported_pkgs <- .get_imported_packages() # nolint: object_usage_linter
   if (package_name != "base" && !(package_name %in% imported_pkgs)) {
-    if (!.safe_require_namespace(package_name)) {
+    if (!.safe_require_namespace(package_name)) { # nolint: object_usage_linter
       stop(
         "Cannot load '", type, "' files without package '", package_name,
         "'"
