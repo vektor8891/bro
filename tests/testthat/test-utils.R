@@ -71,7 +71,6 @@ test_that(".get_imported_packages works correctly", {
 
   # Test that it works when called multiple times (consistency)
   result2 <- .get_imported_packages()
-  expect_equal(result, result2)
 
   # Test that the result is consistent (same order when called multiple times)
   expect_equal(result, result2)
