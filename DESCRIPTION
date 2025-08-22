@@ -2,6 +2,8 @@ Package: bro
 Version: 0.0.1
 Date: 2023-11-06
 Title: Framework for Developing Business Analytics and Data Science Projects that are Well-Organized and Easily Reproducible
+Author: Guilherme Salome [aut, cre], Viktor Szabo [ctb]
+Maintainer: Guilherme Salome <guilhermesalome@gmail.com>
 Authors@R: c(person("Guilherme", "Salome", role = c("aut", "cre"),
                      email = "guilhermesalome@gmail.com"),
              person("Viktor", "Szabo", role = "ctb",
