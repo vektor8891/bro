@@ -28,7 +28,8 @@ Suggests:
   httr,
   curl,
   readr,
-  testthat
+  testthat,
+  mockery
 Description: A framework for developing projects that are well-organized and easy to reproduce.
 License: MIT + file LICENSE
 URL: https://github.com/Salompas/bro
