@@ -6,5 +6,5 @@ A framework for developing projects that are well-organized and easy to reproduc
 
 ```r
 # Install from GitHub
-remotes::install_github("Salompas/bro")
+remotes::install_github("guilherme-salome/bro")
 ```
