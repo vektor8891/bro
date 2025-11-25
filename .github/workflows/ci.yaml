@@ -24,14 +24,6 @@ jobs:
           r-version: 'release'
           use-public-rspm: true
 
-      - name: Cache system dependencies
-        uses: actions/cache@v3
-        with:
-          path: /var/cache/apt
-          key: ${{ runner.os }}-apt-${{ hashFiles('.github/workflows/ci.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-apt-
-
       - name: Install system dependencies for R packages
         run: sudo apt-get update && sudo apt-get install -y libcurl4-openssl-dev libsecret-1-dev
 
