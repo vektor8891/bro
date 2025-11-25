@@ -4,10 +4,12 @@
 \alias{load_nodes}
 \title{Load Nodes from Configuration File}
 \usage{
-load_nodes(path = file.path("R", "nodes.R"))
+load_nodes(path = file.path("R", "nodes.R"), execution = new.env())
 }
 \arguments{
 \item{path}{(string) The path to the configuration file containing nodes and other objects.}
+
+\item{execution}{(environment) An optional execution environment to use; if not provided, a new environment is created.}
 }
 \value{
 Returns a list of nodes loaded from the specified configuration file.

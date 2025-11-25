@@ -28,7 +28,7 @@ detect_changes_input <- function(name, execution) {
   needs_load <- c("hash")
   strategy <- tolower(execution$registry[[name]]$update)
   if(strategy %in% needs_load) {
-    data <- bro:::get_data(name, execution)
+    data <- get_data(name, execution)
   }
 
   ## Check if data was updated compared to recorded status

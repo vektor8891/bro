@@ -32,7 +32,7 @@ create_execution_env <- function(env = NULL) {
   env$registry <- yaml::read_yaml(defaults$registry)
   message("(bro) Loaded data registry from '", defaults$registry, "'")
 
-  env$status <- bro:::load_data_status()
+  env$status <- load_data_status()
   message("(bro) Loaded data status from '", defaults$status, "'")
 
   env$data <- new.env()

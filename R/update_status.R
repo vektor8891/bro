@@ -16,7 +16,7 @@
 update_status <- function(node, inputs) {
 
   ## Load status file
-  status <- bro:::load_data_status()
+  status <- load_data_status()
 
   ## Update node hash
   status$nodes[[node$name]] <- rlang::hash(node)
@@ -27,7 +27,7 @@ update_status <- function(node, inputs) {
   }
 
   ## Save status file
-  bro:::write_status(status)
+  write_status(status)
 
   return(NULL)
 }

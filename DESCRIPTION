@@ -1,12 +1,15 @@
 Package: bro
 Version: 0.0.1
-Date: 2023-11-06
+Date: 2025-11-25
 Title: Framework for Developing Business Analytics and Data Science Projects that are Well-Organized and Easily Reproducible
 Authors@R: c(person("Guilherme", "Salome", role = c("aut", "cre"),
-                     email = "guilhermesalome@gmail.com"))
+                     email = "guilhermesalome@gmail.com"),
+             person("Viktor", "Szabo", role = "ctb",
+                    email = "vszabo@protonmail.com"))
 Depends: R (>= 3.0)
 Imports:
   renv,
+  rlang,
   yaml
 Suggests:
 Description: A framework for developing projects that are well-organized and easy to reproduce.

@@ -26,5 +26,5 @@ get_data <- function(name, execution) {
   }
 
   ## Load from registry
-  return(bro:::load_data(name = name, execution = execution))
+  return(load_data(name = name, execution = execution))
 }

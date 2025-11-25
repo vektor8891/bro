@@ -25,8 +25,8 @@ save_data <- function(data, name, execution) {
     ## Save data
     type <- registry[[name]]$type
     path <- do.call(file.path, append(list(), registry[[name]]$path))
-    saver <- eval(parse(text = bro:::connectors[[type]]$save))
-    message("(bro) Saving to File '", name, "' (", type, ", ", bro:::connectors[[type]]$save, ")")
+    saver <- eval(parse(text = connectors[[type]]$save))
+    message("(bro) Saving to File '", name, "' (", type, ", ", connectors[[type]]$save, ")")
     do.call(what = saver, args = append(list(file = path), registry[[name]]$save_args))
   }
 

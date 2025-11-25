@@ -32,8 +32,8 @@ load_data <- function(name, execution) {
   ## Load data
   type <- registry[[name]]$type
   path <- do.call(file.path, append(list(), registry[[name]]$path))
-  loader <- eval(parse(text = bro:::connectors[[type]]$load))
-  message("(bro) Loading '", name, "' (", type, ", ", bro:::connectors[[type]]$load, ")")
+  loader <- eval(parse(text = connectors[[type]]$load))
+  message("(bro) Loading '", name, "' (", type, ", ", connectors[[type]]$load, ")")
   execution$data[[name]] <- do.call(what = loader, args = append(list(file = path), registry[[name]]$load_args))
 
   return(execution$data[[name]])

@@ -21,22 +21,22 @@ run_node <- function(node, execution) {
   start <- Sys.time()
 
   ## Load data
-  inputs <- lapply(x = node$x, fun = bro:::get_data, execution)
+  inputs <- lapply(x = node$x, fun = get_data, execution)
 
   ## Execute node
   outputs <- base::do.call(what = node$f, args = inputs)
 
   ## Store data in memory and in a file if necessary
   if(length(node$y) == 1) {
-    bro:::save_data(outputs, node$y, execution)
+    save_data(outputs, node$y, execution)
   } else {
     for(i in seq_along(node$y)) {
-      bro:::save_data(outputs[[i]], node$y[[i]], execution)
+      save_data(outputs[[i]], node$y[[i]], execution)
     }
   }
 
   ## Update status on file
-  bro:::update_status(node, inputs)
+  update_status(node, inputs)
 
   stop <- Sys.time()
   message("(bro) Node '", node$name, "' Runtime: ", difftime(stop, start, units = "secs"), " seconds")
