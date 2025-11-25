@@ -6,7 +6,8 @@ Authors@R: c(person("Guilherme", "Salome", role = c("aut", "cre"),
                      email = "guilhermesalome@gmail.com"))
 Depends: R (>= 3.0)
 Imports:
-  renv
+  renv,
+  yaml
 Suggests:
 Description: A framework for developing projects that are well-organized and easy to reproduce.
 License: MIT + file LICENSE
