@@ -22,7 +22,6 @@ Suggests:
   lightgbm,
   data.table,
   feather,
-  parquet,
   jsonlite,
   xml2,
   httr,
