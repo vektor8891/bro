@@ -30,7 +30,7 @@ jobs:
       - name: Cache pak
         uses: actions/cache@v3
         with:
-          path: ~/.local/share/R
+          path: ~/.cache/R/pak
           key: ${{ runner.os }}-pak-${{ hashFiles('**/DESCRIPTION') }}
           restore-keys: |
             ${{ runner.os }}-pak-
