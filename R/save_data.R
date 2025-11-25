@@ -14,12 +14,11 @@
 #' @param execution The execution environment containing the data registry.
 #'
 save_data <- function(data, name, execution) {
-
   ## Get data registry from execution environment
   registry <- execution$registry
 
   ## If data not in registry, leave it in memory only
-  if(!name %in% names(registry)) {
+  if (!name %in% names(registry)) {
     message("(bro) Saving In-memory '", name, "'")
   } else {
     ## Save data

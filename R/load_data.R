@@ -15,17 +15,16 @@
 #' @return Returns the loaded dataset, and it is also stored in the execution environment for further use.
 #'
 load_data <- function(name, execution) {
-
   ## Get data registry from execution environment
   registry <- execution$registry
 
   ## Stop if data does not exist
-  if(! name %in% names(registry)) {
+  if (!name %in% names(registry)) {
     stop("no entry '", name, "' in ", file.path("inst", "data.yaml"))
   }
 
   ## Stop if path to data is missing
-  if(is.null(registry[[name]]$path)) {
+  if (is.null(registry[[name]]$path)) {
     stop("missing 'path' in '", name, "' in ", file.path("inst", "data.yaml"))
   }
 

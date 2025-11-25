@@ -15,8 +15,7 @@
 #' @return Returns the initialized execution environment with loaded parameters, data registry, and data status.
 #'
 create_execution_env <- function(env = NULL) {
-
-  if(is.null(env)) {
+  if (is.null(env)) {
     env <- new.env()
   }
 

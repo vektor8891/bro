@@ -14,7 +14,7 @@ Imports:
 Suggests:
 Description: A framework for developing projects that are well-organized and easy to reproduce.
 License: MIT + file LICENSE
-URL: https://github.com/Salompas/bro
-BugReports: https://github.com/Salompas/bro/issues
+URL: https://github.com/guilherme-salome/bro
+BugReports: https://github.com/guilherme-salome/bro/issues
 RoxygenNote: 7.2.3
 Encoding: UTF-8
