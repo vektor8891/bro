@@ -14,6 +14,7 @@
 #' @param x (character, optional) Inputs for the node, represented as character vectors.
 #' @param y (character, optional) Outputs for the node, represented as character vectors.
 #' @param name (character, optional) The name of the node. If not provided, it defaults to the name of the function.
+#' @param env (environment) The environment in which to store the node. If not provided, it defaults to the parent frame.
 #'
 #' @return Returns a node, which is a named list with components representing the function, inputs, outputs, and name.
 #'
@@ -34,7 +35,7 @@ node <- function(f, x = NULL, y = NULL, name = deparse(substitute(f)), env = par
     class = "node"
   )
   ## Assign node to nodes list
-  if(exists("__nodes__", envir = env)) {
+  if (exists("__nodes__", envir = env)) {
     nodes <- get("__nodes__", envir = env)
   } else {
     nodes <- list()

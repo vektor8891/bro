@@ -2,19 +2,37 @@ Package: bro
 Version: 0.0.1
 Date: 2025-11-25
 Title: Framework for Developing Business Analytics and Data Science Projects that are Well-Organized and Easily Reproducible
+Author: Guilherme Salome [aut, cre], Viktor Szabo [ctb]
+Maintainer: Guilherme Salome <guilhermesalome@gmail.com>
 Authors@R: c(person("Guilherme", "Salome", role = c("aut", "cre"),
                      email = "guilhermesalome@gmail.com"),
              person("Viktor", "Szabo", role = "ctb",
-                    email = "vszabo@protonmail.com"))
+                    email = "vszabo@protonmail.com",
+                    comment = c(ORCID = "0000-0002-1297-0827")))
 Depends: R (>= 3.0)
 Imports:
   renv,
+  yaml,
   rlang,
-  yaml
+  desc
 Suggests:
+  digest,
+  arrow,
+  xgboost,
+  lightgbm,
+  data.table,
+  feather,
+  parquet,
+  jsonlite,
+  xml2,
+  httr,
+  curl,
+  readr,
+  testthat,
+  mockery
 Description: A framework for developing projects that are well-organized and easy to reproduce.
 License: MIT + file LICENSE
-URL: https://github.com/guilherme-salome/bro
-BugReports: https://github.com/guilherme-salome/bro/issues
-RoxygenNote: 7.2.3
+URL: https://github.com/Salompas/bro
+BugReports: https://github.com/Salompas/bro/issues
+RoxygenNote: 7.3.2
 Encoding: UTF-8

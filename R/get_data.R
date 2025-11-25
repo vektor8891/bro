@@ -12,6 +12,7 @@
 #' @param execution The execution environment containing the data registry and loaded datasets.
 #'
 #' @return Returns the specified dataset, either retrieved from the environment or loaded from the data registry.
+#' @export
 #'
 get_data <- function(name, execution) {
   ## Check if data requested is a parameter

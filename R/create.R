@@ -18,12 +18,12 @@
 #' @param git (logical) If TRUE, initializes a Git repository and adds an initial commit.
 #' @param replace (logical) If FALSE and the specified folder already exists, stops and displays an error.
 #'   If TRUE, replaces an existing folder with the new project.
+#' @export
 #'
 create <- function(name = getwd(), example = TRUE, renv = TRUE, git = TRUE, replace = FALSE) {
-
   ## Create project directory
   path <- path.expand(name)
-  if(dir.exists(path) & !replace) {
+  if (dir.exists(path) & !replace) {
     stop("Project could *not* be created because the folder already exists. Please set 'replace = TRUE' to create a project on an existing folder.")
   }
   dir.create(path, showWarnings = FALSE, recursive = TRUE)
@@ -35,12 +35,15 @@ create <- function(name = getwd(), example = TRUE, renv = TRUE, git = TRUE, repl
     configurations = file.path(path, "inst"), # parameters, connections, and data catalog
     data = lapply(
       c("", "base", "inputs", "models", "outputs", "reporting"),
-      function(x) {file.path(path, "data", x)}
+      function(x) {
+        file.path(path, "data", x)
+      }
     ),
     logs = file.path(path, "logs")
   )
   created <- lapply(
-    unlist(folders), dir.create, showWarnings = FALSE, recursive = TRUE
+    unlist(folders), dir.create,
+    showWarnings = FALSE, recursive = TRUE
   )
   message("Folders:\n", paste0(unlist(folders), collapse = "\n"))
 
@@ -54,6 +57,17 @@ create <- function(name = getwd(), example = TRUE, renv = TRUE, git = TRUE, repl
   )
   message("Files:\n", paste0(file.path(folders$configurations, basename(inst)), collapse = "\n"))
 
+  ## Copy connectors.yaml from main package
+  connectors_file <- system.file("connectors.yaml", package = "bro")
+  if (file.exists(connectors_file)) {
+    file.copy(
+      from = connectors_file,
+      to = file.path(folders$configurations, "connectors.yaml"),
+      overwrite = TRUE
+    )
+    message("Copied connectors.yaml from main package")
+  }
+
   ## Copy .gitignore to some data folders
   copied <- file.copy(
     from = system.file(file.path("create", "gitignore_data"), package = "bro"),
@@ -64,7 +78,7 @@ create <- function(name = getwd(), example = TRUE, renv = TRUE, git = TRUE, repl
   message(paste0(file.path(folders$data[-1:-2], ".gitignore"), collapse = "\n"))
 
   ## Copy example files if requested
-  if(example) {
+  if (example) {
     file.copy(
       from = system.file(file.path("example", "costs.csv"), package = "bro"),
       to = folders$data[[2]],
@@ -80,40 +94,43 @@ create <- function(name = getwd(), example = TRUE, renv = TRUE, git = TRUE, repl
   }
 
   ## Set up virtual environment using 'renv'
-  if(renv) {
+  if (renv) {
     message("Virtual Environment:\n")
     renv::init(
-            project = path, # initialize renv in the project folder
-            bare = TRUE,    # do not install any package
-            settings = list(snapshot.type = "all"), # capture all packages that will be installed
-            restart = FALSE # more works needs to be done after renv, will ask user to restart later
-          )
-    tryCatch({
-      ## Try installing 'bro' in the virtual environment
-      renv::install("https://github.com/Salompas/bro", prompt = FALSE) # needs to be replaced by CRAN version
-      message("Installed 'bro' to virtual environment (renv)")
-    },
-    error = function(e) {
-      message("Error when installing 'bro' in virtual environment: ", e$message)
-    })
+      project = path, # initialize renv in the project folder
+      bare = TRUE, # do not install any package
+      settings = list(snapshot.type = "all"), # capture all packages that will be installed
+      restart = FALSE # more works needs to be done after renv, will ask user to restart later
+    )
+    tryCatch(
+      {
+        ## Try installing 'bro' in the virtual environment
+        renv::install("https://github.com/Salompas/bro", prompt = FALSE) # needs to be replaced by CRAN version
+        message("Installed 'bro' to virtual environment (renv)")
+      },
+      error = function(e) {
+        message("Error when installing 'bro' in virtual environment: ", e$message)
+      }
+    )
   }
 
   ## Set up git repository and first commit
-  if(git) {
+  if (git) {
     message("Git:\n")
-    tryCatch({
-      ## Create new git repository and add a commit with all new files
-      system2("git", "init")
-      system2("git", "add -A")
-      system2("git", "commit -m 'Project created'")
-      message("Tracking project with Git")
-    },
-    error = function(e) {
-      message("Unable to initialize Git repository: ", e$message)
-    })
+    tryCatch(
+      {
+        ## Create new git repository and add a commit with all new files
+        system2("git", "init")
+        system2("git", "add -A")
+        system2("git", "commit -m 'Project created'")
+        message("Tracking project with Git")
+      },
+      error = function(e) {
+        message("Unable to initialize Git repository: ", e$message)
+      }
+    )
   }
 
   ## Ask user to start R in the project directory
   message("NOTICE: Project successfully created. Please restart R on the working directory '", path, "'")
-
 }

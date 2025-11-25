@@ -4,7 +4,13 @@
 \alias{node}
 \title{Create a Node in a Data Processing Pipeline}
 \usage{
-node(f, x = NULL, y = NULL, name = deparse(substitute(f)), env = parent.frame())
+node(
+  f,
+  x = NULL,
+  y = NULL,
+  name = deparse(substitute(f)),
+  env = parent.frame()
+)
 }
 \arguments{
 \item{f}{(function) The R function that the node represents in the pipeline.}
@@ -15,7 +21,7 @@ node(f, x = NULL, y = NULL, name = deparse(substitute(f)), env = parent.frame())
 
 \item{name}{(character, optional) The name of the node. If not provided, it defaults to the name of the function.}
 
-\item{env}{(environment) The environment in which the node function is evaluated. Defaults to the parent frame.}
+\item{env}{(environment) The environment in which to store the node. If not provided, it defaults to the parent frame.}
 }
 \value{
 Returns a node, which is a named list with components representing the function, inputs, outputs, and name.

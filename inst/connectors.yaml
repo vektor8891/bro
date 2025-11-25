@@ -1,9 +1,52 @@
-# Defines functions used to load and save data
+# List of data types that can be loaded and saved automatically with 'bro'.
+# Please note that some data types require installing additional packages.
 
 rds:
   load: base::readRDS
   save: base::saveRDS
 
+yaml:
+  load: yaml::read_yaml
+  save: yaml::write_yaml
+
 csv:
   load: readr::read_csv
   save: readr::write_csv
+
+json:
+  load: jsonlite::fromJSON
+  save: jsonlite::toJSON
+
+xml:
+  load: xml2::read_xml
+  save: xml2::write_xml
+
+arrow:
+  load: arrow::read_parquet
+  save: arrow::write_parquet
+
+feather:
+  load: arrow::read_feather
+  save: arrow::write_feather
+
+data.table:
+  load: data.table::fread
+  save: data.table::fwrite
+
+# Model formats
+xgboost:
+  load: xgboost::xgb.load
+  save: xgboost::xgb.save
+
+lightgbm:
+  load: lightgbm::lgb.load
+  save: lightgbm::lgb.save
+
+# HTTP/API data
+http:
+  load: httr::GET
+  save: httr::POST
+
+curl:
+  load: curl::curl_fetch_memory
+  save: curl::curl_fetch_memory
