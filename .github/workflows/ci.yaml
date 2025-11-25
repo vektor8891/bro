@@ -5,10 +5,12 @@ on:
     branches:
       - main
       - develop
+      - chore/ci-test
   pull_request:
     branches:
       - main
       - develop
+  workflow_dispatch:
 
 jobs:
   R-CMD-check:
