@@ -14,6 +14,7 @@
 #' @param execution An optional execution environment to use; if not provided, a new environment is created.
 #'
 #' @return Returns the objects with the 'node' class loaded from the specified script file.
+#' @export
 #'
 load_nodes <- function(path = file.path("R", "nodes.R"), execution = new.env()) {
   ## Load nodes and possibly other objects, including functions, into a separate environment

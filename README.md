@@ -17,8 +17,7 @@
 
 ```r
 # Install from GitHub
-# install.packages("devtools")
-devtools::install_github("Salompas/bro")
+remotes::install_github("guilherme-salome/bro")
 ```
 
 ## Quick Start

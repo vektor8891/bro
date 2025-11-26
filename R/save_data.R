@@ -18,6 +18,7 @@
 #'   execution environment and registered in the data registry.
 #' @param execution The execution environment containing the data
 #'   registry.
+#' @export
 #'
 save_data <- function(data, name, execution) {
   ## Get data registry from execution environment
@@ -29,10 +30,36 @@ save_data <- function(data, name, execution) {
   } else {
     ## Save data
     type <- registry[[name]]$type
-    saver <- eval(parse(text = bro:::connectors[[type]]$save))
+
+    # Check if connector exists
+    if (!type %in% names(connectors)) {
+      stop(
+        "unsupported data type '", type, "'. Available types: ",
+        paste(names(connectors), collapse = ", ")
+      )
+    }
+
+    # Extract package name from saver function
+    saver_func <- connectors[[type]]$save
+    package_name <- strsplit(saver_func, "::")[[1]][1]
+
+    # Check if package is available for non-base packages
+    imported_pkgs <- .get_imported_packages() # nolint: object_usage_linter
+    if (package_name != "base" && !(package_name %in% imported_pkgs)) {
+      if (
+        !.safe_require_namespace(package_name) # nolint: object_usage_linter
+      ) {
+        stop(
+          "Cannot save '", type, "' files without package '", package_name,
+          "'"
+        )
+      }
+    }
+
+    saver <- eval(parse(text = saver_func))
     message(
       "(bro) Saving to File '", name, "' (", type, ", ",
-      bro:::connectors[[type]]$save, ")"
+      saver_func, ")"
     )
 
     ## For database destinations, pass connection and table parameters

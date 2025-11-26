@@ -12,6 +12,7 @@
 #' @param execution The execution environment containing the data registry and loaded datasets.
 #'
 #' @return Returns the specified dataset, either retrieved from the environment or loaded from the data registry.
+#' @export
 #'
 get_data <- function(name, execution) {
 
@@ -26,5 +27,5 @@ get_data <- function(name, execution) {
   }
 
   ## Load from registry
-  return(bro:::load_data(name = name, execution = execution))
+  return(load_data(name = name, execution = execution))
 }
