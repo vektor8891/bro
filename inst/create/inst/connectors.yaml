@@ -7,3 +7,12 @@ csv:
 yaml:
   load: yaml::read_yaml
   save: yaml::write_yaml
+
+rds:
+  load: base::readRDS
+  save: base::saveRDS
+
+# Database connector - use 'connection' field in data.yaml to specify which connection to use
+sql:
+  load: bro:::load_from_database
+  save: bro:::save_to_database

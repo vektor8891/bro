@@ -7,3 +7,8 @@ rds:
 csv:
   load: readr::read_csv
   save: readr::write_csv
+
+# Database connectors - use 'connection' field in data.yaml to specify which connection to use
+sql:
+  load: bro:::load_from_database
+  save: bro:::save_to_database

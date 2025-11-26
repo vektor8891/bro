@@ -1,0 +1,219 @@
+---
+title: "Using Multiple Database Backends with bro"
+author: "bro package"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Using Multiple Database Backends with bro}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = FALSE
+)
+```
+
+## Overview
+
+This vignette demonstrates how to use the pluggable connection system in `bro` to work with different database backends in the same project. You can seamlessly mix PostgreSQL, MySQL, SQLite, Redshift, Netezza, and file-based data sources.
+
+## Step 1: Set up connections.yaml
+
+Create `inst/connections.yaml` with your database connections:
+
+```yaml
+dev_postgres:
+  backend: postgres
+  host: localhost
+  port: 5432
+  database: development
+  credential_key: local_db
+
+prod_redshift:
+  backend: redshift
+  host: prod-cluster.us-east-1.redshift.amazonaws.com
+  port: 5439
+  database: warehouse
+  credential_key: redshift_prod
+
+analytics_mysql:
+  backend: mysql
+  host: mysql.example.com
+  database: analytics
+  credential_key: mysql_creds
+
+local_sqlite:
+  backend: sqlite
+  database: data/cache.db
+```
+
+## Step 2: Set up credentials.yaml
+
+Create `inst/credentials.yaml` (this file is excluded from git by default):
+
+```yaml
+local_db:
+  user: dev_user
+  password: dev_password
+
+redshift_prod:
+  user: analytics_user
+  password: prod_secret_password
+
+mysql_creds:
+  user: readonly
+  password: mysql_password
+```
+
+**Important:** The credentials file is automatically excluded from version control via `.gitignore` to protect sensitive information.
+
+## Step 3: Set up data.yaml
+
+Update `inst/data.yaml` to reference your connections:
+
+```yaml
+# Load from Redshift using a SQL query
+customer_master:
+  type: sql
+  connection: prod_redshift
+  query: "SELECT * FROM customers WHERE active = true"
+
+# Load from MySQL table
+product_catalog:
+  type: sql
+  connection: analytics_mysql
+  table: products
+
+# Save to SQLite (for caching intermediate results)
+temp_results:
+  type: sql
+  connection: local_sqlite
+  table: temp_results
+  save_args:
+    overwrite: true
+
+# Traditional file-based data sources still work
+processed_data:
+  type: csv
+  path: ['data', 'outputs', 'processed.csv']
+```
+
+## Step 4: Create execution environment
+
+```{r}
+library(bro)
+
+# Create execution environment (automatically loads connections registry)
+execution <- create_execution_env()
+```
+
+## Step 5: Define your data processing functions
+
+In `R/nodes.R`, define your data processing pipeline:
+
+```{r}
+process_customers <- function(customer_master, product_catalog) {
+  # Your data processing logic here
+  merged_data <- merge(customer_master, product_catalog, by = "product_id")
+  return(merged_data)
+}
+
+node(
+  f = process_customers,
+  x = c("customer_master", "product_catalog"),
+  y = "processed_data"
+)
+```
+
+## Step 6: Load and run nodes
+
+```{r}
+# Load nodes from your pipeline definition
+nodes <- load_nodes()
+
+# Run each node - connections are managed automatically
+for(node_obj in nodes) {
+  run_node(node_obj, execution)
+}
+```
+
+When you reference data sources like `customer_master`, `bro` will:
+
+1. Check if the connection exists and is valid
+2. Create the connection if needed (using credentials from `credentials.yaml`)
+3. Execute the SQL query or read the table
+4. Return the data for processing
+
+## Step 7: Clean up
+
+```{r}
+# Close all database connections when done
+close_connections(execution)
+```
+
+## Benefits of this approach
+
+1. **Multi-database support** - Mix different databases in one project (Redshift + MySQL + SQLite + files)
+2. **Environment flexibility** - Easy to switch between environments (dev/staging/prod) by changing config files
+3. **Security** - Credentials separated from code and excluded from version control
+4. **Efficiency** - Connections are reused automatically
+5. **Consistency** - Same interface for all backends
+6. **Team collaboration** - Each team member can have their own `credentials.yaml`
+
+## Working with connections directly
+
+You can also work with connections directly if needed:
+
+```{r}
+# Get a specific connection
+conn <- get_connection("prod_redshift", execution)
+
+# Use the connection manually
+result <- DBI::dbGetQuery(conn, "SELECT COUNT(*) FROM sales")
+
+# Connections are automatically reused
+conn2 <- get_connection("prod_redshift", execution)  # Returns same connection
+
+# Close all connections
+close_connections(execution)
+```
+
+## Supported database backends
+
+- **PostgreSQL** - Using RPostgres
+- **MySQL/MariaDB** - Using RMySQL
+- **SQLite** - Using RSQLite
+- **Amazon Redshift** - Using RPostgres
+- **IBM Netezza** - Using RODBC
+- **Generic ODBC** - Using odbc package
+
+## Installation requirements
+
+Install the database drivers you need:
+
+```{r}
+# PostgreSQL / Redshift
+install.packages("RPostgres")
+
+# MySQL
+install.packages("RMySQL")
+
+# SQLite
+install.packages("RSQLite")
+
+# Netezza / generic ODBC
+install.packages("RODBC")
+
+# Modern ODBC (alternative)
+install.packages("odbc")
+```
+
+## See also
+
+- `?get_connection` - Get or create a database connection
+- `?close_connections` - Close all active connections
+- See `docs/DATABASE_CONNECTIONS.md` for comprehensive documentation

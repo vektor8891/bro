@@ -6,8 +6,20 @@ Authors@R: c(person("Guilherme", "Salome", role = c("aut", "cre"),
                      email = "guilhermesalome@gmail.com"))
 Depends: R (>= 3.0)
 Imports:
-  renv
+  renv,
+  DBI,
+  yaml,
+  rlang
 Suggests:
+  RPostgres,
+  RMySQL,
+  RSQLite,
+  RODBC,
+  odbc,
+  readr,
+  knitr,
+  rmarkdown
+VignetteBuilder: knitr
 Description: A framework for developing projects that are well-organized and easy to reproduce.
 License: MIT + file LICENSE
 URL: https://github.com/Salompas/bro

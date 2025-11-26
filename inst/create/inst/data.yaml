@@ -1,2 +1,27 @@
 # data.yaml: lists all data used and created by your project
+#
+# File-based data sources (CSV, RDS, etc.):
+# my_csv_data:
+#   type: csv
+#   path: ['data', 'base', 'myfile.csv']
+#
+# Database data sources (using SQL):
+# my_table_data:
+#   type: sql
+#   connection: my_postgres_db  # Must match a connection name in connections.yaml
+#   table: public.my_table      # Either specify table name
+#
+# my_query_data:
+#   type: sql
+#   connection: my_redshift
+#   query: "SELECT * FROM sales WHERE date >= '2023-01-01'"  # Or specify a query
+#
+# Database data destinations:
+# output_table:
+#   type: sql
+#   connection: my_postgres_db
+#   table: public.results
+#   save_args:
+#     overwrite: true  # Set to true to replace existing table
+#     append: false    # Set to true to append to existing table
 
