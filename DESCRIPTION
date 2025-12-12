@@ -1,6 +1,6 @@
 Package: bro
 Version: 0.0.1
-Date: 2023-11-06
+Date: 2025-11-25
 Title: Framework for Developing Business Analytics and Data Science Projects that are Well-Organized and Easily Reproducible
 Author: Guilherme Salome [aut, cre], Viktor Szabo [ctb]
 Maintainer: Guilherme Salome <guilhermesalome@gmail.com>
@@ -22,7 +22,6 @@ Suggests:
   lightgbm,
   data.table,
   feather,
-  parquet,
   jsonlite,
   xml2,
   httr,
