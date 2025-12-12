@@ -15,14 +15,13 @@
 #' @export
 #'
 get_data <- function(name, execution) {
-
   ## Check if data requested is a parameter
-  if(base::grepl(pattern = "^parameters($|\\$)", x = name)) {
+  if (base::grepl(pattern = "^parameters($|\\$)", x = name)) {
     return(eval(parse(text = paste0("execution$", name))))
   }
 
   ## Check if data is already loaded in the execution environment
-  if(!is.null(execution$data) && base::exists(x = name, where = execution$data, inherits = FALSE)) {
+  if (!is.null(execution$data) && base::exists(x = name, where = execution$data, inherits = FALSE)) {
     return(base::get(name, envir = as.environment(execution$data)))
   }
 
