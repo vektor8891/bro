@@ -50,3 +50,8 @@ http:
 curl:
   load: curl::curl_fetch_memory
   save: curl::curl_fetch_memory
+
+# Database connectors - use 'connection' field in data.yaml to specify which connection to use
+sql:
+  load: bro:::load_from_database
+  save: bro:::save_to_database

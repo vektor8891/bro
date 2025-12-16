@@ -1,1 +1,42 @@
 # connections.yaml: lists all connections to databases
+#
+# This file defines database connections that can be used by data sources in data.yaml.
+# Sensitive credentials should be stored in credentials.yaml (not tracked by git) and
+# referenced using the credential_key field.
+#
+# Example connections:
+#
+# my_postgres_db:
+#   backend: postgres
+#   host: localhost
+#   port: 5432
+#   database: mydb
+#   credential_key: postgres_creds  # References credentials.yaml
+#
+# my_mysql_db:
+#   backend: mysql
+#   host: db.example.com
+#   port: 3306
+#   database: analytics
+#   user: readonly_user
+#   password: "your_password_here"  # Or use credential_key
+#
+# my_redshift:
+#   backend: redshift
+#   host: my-cluster.us-east-1.redshift.amazonaws.com
+#   port: 5439
+#   database: warehouse
+#   credential_key: redshift_prod
+#
+# my_sqlite:
+#   backend: sqlite
+#   database: data/local.db
+#
+# my_netezza:
+#   backend: netezza
+#   host: netezza.example.com
+#   port: 5480
+#   database: analytics
+#   credential_key: netezza_prod
+#
+# Supported backends: postgres, mysql, sqlite, redshift, netezza, odbc

@@ -12,10 +12,16 @@ Authors@R: c(person("Guilherme", "Salome", role = c("aut", "cre"),
 Depends: R (>= 3.0)
 Imports:
   renv,
+  DBI,
   yaml,
   rlang,
   desc
 Suggests:
+  RPostgres,
+  RMySQL,
+  RSQLite,
+  RODBC,
+  odbc,
   digest,
   arrow,
   xgboost,
@@ -27,8 +33,11 @@ Suggests:
   httr,
   curl,
   readr,
+  knitr,
+  rmarkdown,
   testthat,
   mockery
+VignetteBuilder: knitr
 Description: A framework for developing projects that are well-organized and easy to reproduce.
 License: MIT + file LICENSE
 URL: https://github.com/Salompas/bro
