@@ -50,3 +50,5 @@ rsconnect/
 
 # Mac Temporary Files
 \#*
+/doc/
+/Meta/

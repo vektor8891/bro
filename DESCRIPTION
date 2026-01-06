@@ -15,7 +15,9 @@ Imports:
   DBI,
   yaml,
   rlang,
-  desc
+  desc,
+  glue,
+  purrr
 Suggests:
   RPostgres,
   RMySQL,
