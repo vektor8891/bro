@@ -77,7 +77,7 @@
 #' in the data catalog. If parameters is specified, data is saved on a modified
 #' version of the filepath entry in the data catalog. The new filepath has the
 #' format "filepath/parameters_file.yml/".
-#'
+#' @importFrom aws.s3 put_object
 #' @return (class(data)) Returns the saved data.
 #'
 saving <- function(
@@ -180,7 +180,7 @@ saving <- function(
         }
         tryCatch(
           {
-            aws.s3::put_object(
+            put_object(
               file = filepath,
               object = file.path(s3_path_time, filepath),
               bucket = s3_bucket
@@ -225,7 +225,7 @@ save_parameters <- function(filepath, parameters) {
       recursive = TRUE
     )
   }
-  return(new_filepath)
+  new_filepath
 }
 
 
@@ -257,7 +257,7 @@ save_versioned <- function(vartype, filepath, runtime) {
     )
     new_filepath <- base::file.path(filepath, runtime, base::basename(filepath))
   }
-  return(new_filepath)
+  new_filepath
 }
 
 #' @title Write Data to Remote Server (Netezza or Redshift)
@@ -285,7 +285,7 @@ save_remote <- function(context, data, filepath, vartype, save_args) {
       save_args
     )
   )
-  return(data)
+  data
 }
 
 #' Saves data to a specific Lilly's Netezza server using
@@ -319,7 +319,7 @@ save_netezzasql <- function(context, data, filepath, vartype, save_args) {
       save_args
     )
   )
-  return(data)
+  data
 }
 
 #' Saves data to a specific Lilly's Netezza server using
@@ -332,6 +332,7 @@ save_netezzasql <- function(context, data, filepath, vartype, save_args) {
 #' \href{./write_table.html}{framebar::write_table}. Then, an INSERT INTO
 #' statement is executed with \link[DBI]{dbExecute}, which quickly uploads all
 #' data from the csv file into the empty remote table.
+#' @importFrom dbplyr in_schema
 #'
 #' @inheritParams save_netezzasql
 save_fastnetezzasql <- function(context, data, filepath, vartype, save_args) {
@@ -373,9 +374,9 @@ save_fastnetezzasql <- function(context, data, filepath, vartype, save_args) {
   DBI::dbExecute(connection, query)
   data <- dplyr::tbl(
     connection,
-    dbplyr::in_schema(schema_table[[1]], schema_table[[2]])
+    in_schema(schema_table[[1]], schema_table[[2]])
   )
-  return(data)
+  data
 }
 
 #' Saves data to an RDS file using \link[base]{saveRDS}.
@@ -393,7 +394,7 @@ save_rds <- function(context, data, filepath, vartype, save_args) {
     list(object = data, file = filepath),
     save_args
   ))
-  return(data)
+  data
 }
 
 #' Saves data to a CSV file using \link[readr]{write_csv}.
@@ -403,7 +404,7 @@ save_rds <- function(context, data, filepath, vartype, save_args) {
 #' @inheritParams save_netezzasql
 save_csv <- function(context, data, filepath, vartype, save_args) {
   do.call(readr::write_csv, append(list(x = data, file = filepath), save_args))
-  return(data)
+  data
 }
 
 #' Prints a figure to a PNG file using \link[grDevices]{png}.
@@ -424,7 +425,7 @@ save_png <- function(context, data, filepath, vartype, save_args) {
   )
   print(data) # necessary for storing figure in png file
   dev.off()
-  return(data)
+  data
 }
 
 #' Saves data to an Excel file using \link[writexl]{write_xlsx}.
@@ -437,7 +438,7 @@ save_excel <- function(context, data, filepath, vartype, save_args) {
     list(x = data, path = filepath),
     save_args
   ))
-  return(data)
+  data
 }
 
 #' Prints a table to a PNG file using \link[grDevices]{png} and
@@ -460,7 +461,7 @@ save_table <- function(context, data, filepath, vartype, save_args) {
   )
   gridExtra::grid.table(data, rows = NULL)
   grDevices::dev.off()
-  return(data)
+  data
 }
 
 #' Saves data to XML format using \link[xml2]{write_xml}.
@@ -470,7 +471,7 @@ save_table <- function(context, data, filepath, vartype, save_args) {
 #' @inheritParams save_netezzasql
 save_xml <- function(context, data, filepath, vartype, save_args) {
   do.call(xml2::write_xml, append(list(x = data, file = filepath), save_args))
-  return(data)
+  data
 }
 
 #' Saves data to JSON format using \link[jsonlite]{write_json}.
@@ -483,7 +484,7 @@ save_json <- function(context, data, filepath, vartype, save_args) {
     list(x = data, path = filepath),
     save_args
   ))
-  return(data)
+  data
 }
 
 #' Saves data to a LightGBM Dataset format (binary) using
@@ -496,7 +497,7 @@ save_lightgbm <- function(context, data, filepath, vartype) {
     base::file.remove(filepath)
   }
   do.call(lightgbm::lgb.Dataset.save, list(dataset = data, fname = filepath))
-  return(data)
+  data
 }
 
 #' Saves a LightGBM model using \link[lightgbm]{lgb.save}.
@@ -508,7 +509,7 @@ save_lightgbm_model <- function(context, data, filepath, vartype) {
     base::file.remove(filepath)
   }
   do.call(lightgbm::lgb.save, list(booster = data, filename = filepath))
-  return(data)
+  data
 }
 
 #' Saves data to a generic delimited (default is " ") file using
@@ -522,7 +523,7 @@ save_delim <- function(context, data, filepath, vartype, save_args) {
     list(x = data, file = filepath),
     save_args
   ))
-  return(data)
+  data
 }
 
 
@@ -536,13 +537,18 @@ save_delim <- function(context, data, filepath, vartype, save_args) {
 save_umap_model <- function(context, data, filepath, vartype, save_args) {
   # set default
   save_args$unload <- ifelse(is.null(save_args$unload), FALSE, save_args$unload)
-  save_args$verbose <- ifelse(is.null(save_args$verbose), FALSE, save_args$verbose)
+  save_args$verbose <- ifelse(is.null(save_args$verbose), FALSE,
+    save_args$verbose
+  )
   # check if file exists
   if (base::file.exists(filepath)) {
     base::file.remove(filepath)
   }
-  do.call(uwot::save_uwot, append(list(model = data, file = filepath), save_args))
-  return(data)
+  do.call(uwot::save_uwot, append(
+    list(model = data, file = filepath),
+    save_args
+  ))
+  data
 }
 
 #' Saves data to a Parquet file using \link[arrow]{write_parquet}.
@@ -563,5 +569,5 @@ save_parquet <- function(context, data, filepath, vartype, save_args = list()) {
     save_args
   ))
 
-  return(data)
+  data
 }

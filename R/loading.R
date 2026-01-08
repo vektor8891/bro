@@ -44,6 +44,7 @@
 #' new filepath has the format "filepath/parameters_file.yml/". If the data is
 #' versioned, loads the data with the most current timestamp.
 #' @inheritParams saving
+#' @importFrom dbplyr in_schema
 #'
 #' @return (object) Object with data.
 loading <- function(
@@ -85,7 +86,7 @@ loading <- function(
     connection <- get_connection(vartype, context)
     # split to get schema and table name
     schema_name <- base::strsplit(filepath, "\\.")[[1]]
-    return(dplyr::tbl(connection, dbplyr::in_schema(
+    return(dplyr::tbl(connection, in_schema(
       schema_name[[1]],
       schema_name[[2]]
     )))
