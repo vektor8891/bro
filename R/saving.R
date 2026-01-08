@@ -264,7 +264,7 @@ save_versioned <- function(vartype, filepath, runtime) {
 #' @inheritParams save_netezzasql
 #' @author Guilherme Ferreira Pelucio Salome
 save_remote <- function(context, data, filepath, vartype, save_args) {
-  connection <- framebar::get_connection(vartype, context)
+  connection <- get_connection(vartype, context)
   save_args$temporary <- ifelse(is.null(save_args$temporary), FALSE,
     save_args$temporary
   )
@@ -275,7 +275,7 @@ save_remote <- function(context, data, filepath, vartype, save_args) {
     save_args$append
   )
   data <- do.call(
-    framebar::write_table,
+    write_table,
     append(
       list(
         data = data,
@@ -289,13 +289,13 @@ save_remote <- function(context, data, filepath, vartype, save_args) {
 }
 
 #' Saves data to a specific Lilly's Netezza server using
-#' \href{./write_table.html}{framebar::write_table} (fast for remote data
+#' \href{./write_table.html}{write_table} (fast for remote data
 #' already in the server).
 #'
 #' @param filepath (string) Filepath where data would be originally stored.
 #' @param vartype (string) Type of data as specified in the data catalog.
 #' @param save_args (list, optional) List of optional arguments passed to
-#' \href{./write_table.html}{framebar::write_table}.
+#' \href{./write_table.html}{write_table}.
 #' @inheritParams saving
 #'
 #' @return Variable referencing data.
@@ -309,7 +309,7 @@ save_netezzasql <- function(context, data, filepath, vartype, save_args) {
     save_args$overwrite
   )
   data <- do.call(
-    framebar::write_table,
+    write_table,
     append(
       list(
         data = data,
@@ -323,16 +323,17 @@ save_netezzasql <- function(context, data, filepath, vartype, save_args) {
 }
 
 #' Saves data to a specific Lilly's Netezza server using
-#' \href{./write_table.html}{framebar::write_table} (fast for local data not
+#' \href{./write_table.html}{write_table} (fast for local data not
 #' yet in the server).
 #'
 #' @details
 #' Data is first stored in a temporary csv file. Then, an empty table with the
 #' same column names and data types as your data is created on Netezza using
-#' \href{./write_table.html}{framebar::write_table}. Then, an INSERT INTO
+#' \href{./write_table.html}{write_table}. Then, an INSERT INTO
 #' statement is executed with \link[DBI]{dbExecute}, which quickly uploads all
 #' data from the csv file into the empty remote table.
 #' @importFrom dbplyr in_schema
+#' @importFrom dplyr tbl filter sql
 #'
 #' @inheritParams save_netezzasql
 save_fastnetezzasql <- function(context, data, filepath, vartype, save_args) {
@@ -356,10 +357,10 @@ save_fastnetezzasql <- function(context, data, filepath, vartype, save_args) {
     save_args$overwrite
   )
   do.call(
-    framebar::write_table,
+    write_table,
     append(
       list(
-        data = dplyr::filter(data, NA), # only write header and data types
+        data = filter(data, NA), # only write header and data types
         connection = connection,
         schema_dot_name = filepath
       ),
@@ -370,9 +371,9 @@ save_fastnetezzasql <- function(context, data, filepath, vartype, save_args) {
   print("Saving to Netezza")
   # split to get schema and table name
   schema_table <- base::strsplit(filepath, "\\.")[[1]]
-  query <- dplyr::sql(glue::glue("INSERT INTO {schema_table[[1]]}.{schema_table[[2]]} SELECT * FROM EXTERNAL '{temp_csv}' USING (DELIMITER ',' SKIPROWS 1 REMOTESOURCE 'ODBC')")) # nolint
+  query <- sql(glue::glue("INSERT INTO {schema_table[[1]]}.{schema_table[[2]]} SELECT * FROM EXTERNAL '{temp_csv}' USING (DELIMITER ',' SKIPROWS 1 REMOTESOURCE 'ODBC')")) # nolint
   DBI::dbExecute(connection, query)
-  data <- dplyr::tbl(
+  data <- tbl(
     connection,
     in_schema(schema_table[[1]], schema_table[[2]])
   )
@@ -447,6 +448,7 @@ save_excel <- function(context, data, filepath, vartype, save_args) {
 #'
 #' @param save_args (list, optional) List of optional parameters passed to
 #' base::saveRDS().
+#' @importFrom gridExtra grid.table
 #' @inheritParams save_netezzasql
 save_table <- function(context, data, filepath, vartype, save_args) {
   ## Set defaults
@@ -459,7 +461,7 @@ save_table <- function(context, data, filepath, vartype, save_args) {
     grDevices::png,
     append(list(filename = filepath), save_args)
   )
-  gridExtra::grid.table(data, rows = NULL)
+  grid.table(data, rows = NULL)
   grDevices::dev.off()
   data
 }

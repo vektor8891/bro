@@ -45,6 +45,10 @@
 #' versioned, loads the data with the most current timestamp.
 #' @inheritParams saving
 #' @importFrom dbplyr in_schema
+#' @importFrom dplyr tbl
+#' @importFrom glue glue
+#' @importFrom png readPNG
+#' @importFrom readxl read_excel
 #'
 #' @return (object) Object with data.
 loading <- function(
@@ -59,7 +63,7 @@ loading <- function(
   if (is.null(filepath_raw)) {
     stop(paste0("No filepath for ", varname, ". Stop."))
   }
-  filepath <- glue::glue(filepath_raw, .envir = context)
+  filepath <- glue(filepath_raw, .envir = context)
   if (length(filepath) == 0) {
     stop(paste0("Couldn't evaluate filepath for ", varname, ". Stop."))
   }
@@ -86,7 +90,7 @@ loading <- function(
     connection <- get_connection(vartype, context)
     # split to get schema and table name
     schema_name <- base::strsplit(filepath, "\\.")[[1]]
-    return(dplyr::tbl(connection, in_schema(
+    return(tbl(connection, in_schema(
       schema_name[[1]],
       schema_name[[2]]
     )))
@@ -102,9 +106,9 @@ loading <- function(
       load_args
     )))
   } else if (vartype == "PNG") {
-    return(png::readPNG(filepath))
+    return(readPNG(filepath))
   } else if (vartype == "Excel") {
-    return(do.call(readxl::read_excel, append(
+    return(do.call(read_excel, append(
       list(path = filepath),
       load_args
     )))

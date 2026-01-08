@@ -32,6 +32,7 @@
 #' node during execution.
 #' @return (environment) Environment containing the catalog, parameters,
 #' connection and outputs from nodes.
+#' @importFrom tictoc tic toc
 #' @export
 run <- function(hook = "default",
                 parameters = "parameters.yml",
@@ -47,13 +48,13 @@ run <- function(hook = "default",
   runtime <- base::format(base::Sys.time(), format = "%Y%m%d%H%M%S")
   ## Run hooked pipelines
   pipeline <- context$hooks[[hook]]
-  tictoc::tic(hook)
+  tic(hook)
   if (is.null(pipeline)) {
     base::stop(glue::glue("Undefined pipeline '{hook}'. Available pipelines are: {paste0(names(context$hooks), collapse = ', ')}. Visit hooks.R to add a new entry.")) # nolint
   }
   for (i in seq_along(pipeline)) {
     node <- pipeline[[i]]
-    tictoc::tic(node$name)
+    tic(node$name)
     if (verbose) {
       print(paste0("==== NODE: ", node$name, " ===="))
     }
@@ -94,12 +95,12 @@ run <- function(hook = "default",
         }
       }
     }
-    time <- tictoc::toc(quiet = TRUE)
+    time <- toc(quiet = TRUE)
     print(paste("(INFO)", time$callback_msg))
     ## Clear outputs that are not reused
     if (clear) clear_memory(node, pipeline[-1:-i], context)
   }
-  hook_time <- tictoc::toc(quiet = TRUE)
+  hook_time <- toc(quiet = TRUE)
   print(paste("(INFO)", hook_time$callback_msg))
   if (verbose) {
     print("=== DONE ===")

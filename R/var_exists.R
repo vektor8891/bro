@@ -6,6 +6,9 @@
 #' @param context (environment) Environment containing data catalog.
 #' @param parameters (string, optional) Name of a parameters YML file stored in
 #' the conf/base folder.
+#' @importFrom glue glue
+#' @importFrom DBI dbExistsTable Id
+#' @importFrom stringr str_split
 #' @return (boolean) TRUE if variable exists in memory or disk.
 var_exists <- function(output, context, parameters = "parameters.yml") {
   ## In memory
@@ -16,14 +19,14 @@ var_exists <- function(output, context, parameters = "parameters.yml") {
   if (output %in% names(context$catalog)) {
     vartype <- context$catalog[[output]]$type
     filepath_raw <- context$catalog[[output]]$filepath
-    filepath <- glue::glue(filepath_raw, .envir = context)
+    filepath <- glue(filepath_raw, .envir = context)
     if (length(filepath) == 0) {
       stop(paste0("Couldn't evaluate filepath for ", output, ". Stop."))
     }
     if (is_remote(vartype)) {
-      remote_table <- stringr::str_split(filepath, "\\.")[[1]]
+      remote_table <- str_split(filepath, "\\.")[[1]]
       connection <- get_connection(vartype, context)
-      return(DBI::dbExistsTable(connection, DBI::Id(
+      return(dbExistsTable(connection, Id(
         schema = remote_table[1],
         table = remote_table[2]
       )))
