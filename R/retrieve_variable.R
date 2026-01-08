@@ -31,7 +31,7 @@ retrieve_variable <- function(
     context = NULL, force_reload = FALSE, verbose = TRUE) {
   ## If no environment supplied, use .GlobalEnv for loading data
   if (is.null(context)) {
-    context <- framebar::get_context(parameters = parameters, global = TRUE)
+    context <- get_context(parameters = parameters, global = TRUE)
   }
   if (base::exists(
     varname,
@@ -47,7 +47,7 @@ retrieve_variable <- function(
   ) && !force_reload) {
     # If variable is value in parameters
     splitted <- base::unlist(base::strsplit(varname, "$", fixed = TRUE))
-    extract <- framebar::retrieve_variable(splitted[[1]],
+    extract <- retrieve_variable(splitted[[1]],
       context = context,
       verbose = FALSE
     )
@@ -60,7 +60,7 @@ retrieve_variable <- function(
     return(extract)
   } else if (varname %in% names(context$catalog)) {
     # If variable in Data Catalog
-    return(framebar:::loading(varname, context, parameters, verbose))
+    return(loading(varname, context, parameters, verbose))
   } else { # If variable cannot be found
     stop(paste0("Could not find: ", varname))
   }
