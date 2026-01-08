@@ -20,9 +20,9 @@ var_exists <- function(output, context, parameters = "parameters.yml") {
     if (length(filepath) == 0) {
       stop(paste0("Couldn't evaluate filepath for ", output, ". Stop."))
     }
-    if (framebar:::is_remote(vartype)) {
+    if (is_remote(vartype)) {
       remote_table <- stringr::str_split(filepath, "\\.")[[1]]
-      connection <- framebar:::get_connection(vartype, context)
+      connection <- get_connection(vartype, context)
       return(DBI::dbExistsTable(connection, DBI::Id(
         schema = remote_table[1],
         table = remote_table[2]
@@ -30,7 +30,7 @@ var_exists <- function(output, context, parameters = "parameters.yml") {
     } else { # local files are potentially versioned
       versioned <- context$catalog[[output]]$versioned
       if (!is.null(versioned) && versioned == TRUE) {
-        filepath <- framebar:::load_versioned(vartype, filepath, context)
+        filepath <- load_versioned(vartype, filepath, context)
       }
       # include parameters folder if file path is not in 01_raw
       if (!base::grepl(
