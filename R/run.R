@@ -5,7 +5,7 @@
 #' Pipelines are given names in the hooks.R file.
 #' Given a name of a hooked pipeline, framebar will execute each of its nodes
 #' in a separate environment. The environment is returned at the end of the
-#' execution. Each call to framebar::run creates and runs on a new environment.
+#' execution. Each call to run creates and runs on a new environment.
 #'
 #' @param hook (string, optional) String used to recover the pipeline(s) from
 #' the hooks list. Defaults to the 'default' pipeline.
@@ -41,7 +41,7 @@ run <- function(hook = "default",
                 clear = FALSE,
                 verbose = TRUE) {
   ## Load parameters, catalog and hooks into environment
-  context <- framebar::get_context(parameters = parameters)
+  context <- get_context(parameters = parameters)
   context$context <- context # reference iself so it can be used as input
   ## Store runtime (used for versioning outputs)
   runtime <- base::format(base::Sys.time(), format = "%Y%m%d%H%M%S")
@@ -57,7 +57,7 @@ run <- function(hook = "default",
     if (verbose) {
       print(paste0("==== NODE: ", node$name, " ===="))
     }
-    checks <- base::unlist(purrr::map(node$outputs, framebar:::var_exists,
+    checks <- base::unlist(purrr::map(node$outputs, var_exists,
       context = context, parameters = parameters
     ))
     if (cached && all(checks) && !any(
@@ -71,7 +71,7 @@ run <- function(hook = "default",
       print(glue::glue("CACHE {node$outputs}"))
     } else {
       ## Load inputs for node
-      inputs <- purrr::map(node$inputs, framebar::retrieve_variable,
+      inputs <- purrr::map(node$inputs, retrieve_variable,
         parameters = parameters, context = context, verbose = verbose
       )
       ## Execute function
@@ -81,13 +81,13 @@ run <- function(hook = "default",
       results <- base::do.call(node$func, inputs)
       ## Save results in memory or disk
       if (length(node$outputs) == 1) { # avoided map2 due to edge cases
-        framebar:::saving(
+        saving(
           node$outputs, results, context, verbose, runtime,
           parameters
         )
       } else {
         for (j in seq_along(node$outputs)) {
-          framebar:::saving(
+          saving(
             node$outputs[[j]], results[[j]], context, verbose,
             runtime, parameters
           )
