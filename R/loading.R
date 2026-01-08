@@ -49,6 +49,13 @@
 #' @importFrom glue glue
 #' @importFrom png readPNG
 #' @importFrom readxl read_excel
+#' @importFrom xml2 read_xml
+#' @importFrom jsonlite fromJSON
+#' @importFrom xgboost xgb.DMatrix
+#' @importFrom lightgbm lgb.Dataset lgb.load
+#' @importFrom uwot load_uwot
+#' @importFrom arrow read_parquet
+#' @importFrom readr read_csv read_delim
 #'
 #' @return (object) Object with data.
 loading <- function(
@@ -97,11 +104,11 @@ loading <- function(
   } else if (vartype == "RDS") {
     return(base::readRDS(filepath))
   } else if (vartype == "CSV") {
-    return(do.call(readr::read_csv, append(list(file = filepath), load_args)))
+    return(do.call(read_csv, append(list(file = filepath), load_args)))
   } else if (tolower(vartype) == "delim") {
-    return(do.call(readr::read_delim, append(list(file = filepath), load_args)))
+    return(do.call(read_delim, append(list(file = filepath), load_args)))
   } else if (vartype == "xgb.DMatrix") {
-    return(do.call(xgboost::xgb.DMatrix, append(
+    return(do.call(xgb.DMatrix, append(
       list(data = filepath),
       load_args
     )))
@@ -113,20 +120,20 @@ loading <- function(
       load_args
     )))
   } else if (vartype == "XML") {
-    return(do.call(xml2::read_xml, append(list(x = filepath), load_args)))
+    return(do.call(read_xml, append(list(x = filepath), load_args)))
   } else if (vartype == "JSON") {
-    return(do.call(jsonlite::fromJSON, append(list(txt = filepath), load_args)))
+    return(do.call(fromJSON, append(list(txt = filepath), load_args)))
   } else if (vartype == "lgb.Dataset") {
-    return(do.call(lightgbm::lgb.Dataset, append(
+    return(do.call(lgb.Dataset, append(
       list(data = filepath),
       load_args
     )))
   } else if (vartype == "lgb.Model") {
-    return(do.call(lightgbm::lgb.load, list(filename = filepath)))
+    return(do.call(lgb.load, list(filename = filepath)))
   } else if (vartype == "umap.Model") {
-    return(do.call(uwot::load_uwot, list(file = filepath)))
+    return(do.call(load_uwot, list(file = filepath)))
   } else if (vartype == "Parquet") {
-    return(do.call(arrow::read_parquet, append(list(file = filepath), load_args)))
+    return(do.call(read_parquet, append(list(file = filepath), load_args)))
   } else {
     stop(paste0("Data type (", vartype, ") not supported."))
   }

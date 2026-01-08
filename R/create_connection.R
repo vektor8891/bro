@@ -31,7 +31,7 @@ create_connection <- function(config, name) {
 
   ## Load credentials if credential_key is specified
   if (!is.null(config$credential_key)) {
-    credentials <- bro:::load_credentials(config$credential_key)
+    credentials <- load_credentials(config$credential_key)
     ## Merge credentials into config (credentials override config)
     config <- utils::modifyList(config, credentials)
   }

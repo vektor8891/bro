@@ -433,9 +433,10 @@ save_png <- function(context, data, filepath, vartype, save_args) {
 #'
 #' @param save_args (list, optional) List of optional parameters passed to
 #' \link[writexl]{write_xlsx}.
+#' @importFrom writexl write_xlsx
 #' @inheritParams save_netezzasql
 save_excel <- function(context, data, filepath, vartype, save_args) {
-  do.call(writexl::write_xlsx, append(
+  do.call(write_xlsx, append(
     list(x = data, path = filepath),
     save_args
   ))
@@ -534,6 +535,7 @@ save_delim <- function(context, data, filepath, vartype, save_args) {
 #' @param save_args (list, optional) List of optional parameters passed to
 #' \link[uwot]{save_uwot}.
 #' Additional save arguments are not supported.
+#' @importFrom uwot save_uwot
 #'
 #' @inheritParams save_netezzasql
 save_umap_model <- function(context, data, filepath, vartype, save_args) {
@@ -546,7 +548,7 @@ save_umap_model <- function(context, data, filepath, vartype, save_args) {
   if (base::file.exists(filepath)) {
     base::file.remove(filepath)
   }
-  do.call(uwot::save_uwot, append(
+  do.call(save_uwot, append(
     list(model = data, file = filepath),
     save_args
   ))

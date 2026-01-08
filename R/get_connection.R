@@ -70,7 +70,7 @@ get_connection <- function(name, execution) {
   }
 
   ## Create connection based on backend type
-  conn <- bro:::create_connection(config, name)
+  conn <- create_connection(config, name)
 
   ## Store connection in execution environment
   if (is.null(execution$connections)) {

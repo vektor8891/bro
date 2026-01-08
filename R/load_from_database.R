@@ -36,7 +36,7 @@ load_from_database <- function(
   }
 
   ## Get database connection
-  conn <- bro:::get_connection(connection, execution)
+  conn <- get_connection(connection, execution)
 
   ## Load data
   if (!is.null(query)) {

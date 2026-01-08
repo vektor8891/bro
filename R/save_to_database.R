@@ -36,7 +36,7 @@ save_to_database <- function(
   }
 
   ## Get database connection
-  conn <- bro:::get_connection(connection, execution)
+  conn <- get_connection(connection, execution)
 
   ## Save data
   message(
